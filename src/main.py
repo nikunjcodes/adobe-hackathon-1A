@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 class OutlineExtractor:
     def __init__(self):
         self.processor = PDFProcessor()
-        self.input_dir = Path("/app/input")
-        self.output_dir = Path("/app/output")
+        self.input_dir = Path("./input")
+        self.output_dir = Path("./output")
         self.time_limit = 10
 
     def process_all_pdfs(self):

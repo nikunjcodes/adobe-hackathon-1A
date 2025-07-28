@@ -42,7 +42,8 @@ class TitleExtractor:
 
             candidates = []
 
-            for block in blocks[:3]:
+            # Look at more blocks to find title
+            for block in blocks[:5]:  # Increased from 3 to 5
                 if "lines" not in block:
                     continue
 
@@ -76,11 +77,14 @@ class TitleExtractor:
                         })
 
             if candidates:
+                # Sort by font size (desc) then by position (asc)
                 candidates.sort(key=lambda x: (-x["font_size"], x["y_pos"]))
-                return candidates[0]["text"]
+                best = candidates[0]
+                logger.info(f"Title from first page: {best['text']}")
+                return best["text"]
 
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"Error extracting title from first page: {e}")
 
         return ""
 
@@ -88,21 +92,24 @@ class TitleExtractor:
         if len(text) < 5 or len(text) > 200:
             return False
 
-        if font_size < 12:
+        # Reduced minimum font size requirement
+        if font_size < 10:  # Changed from 12 to 10
             return False
 
-        if y_pos > 300:
+        # Increased y position threshold for more flexibility
+        if y_pos > 400:  # Changed from 300 to 400
             return False
 
         if not re.search(r'[a-zA-Z]', text):
             return False
 
-        if is_likely_heading(text):
-            return False
+        # REMOVED the is_likely_heading check that was rejecting valid titles
+        # The original code had: if is_likely_heading(text): return False
+        # This was incorrectly rejecting titles that contained heading-like words
 
         text_lower = text.lower()
         avoid_patterns = [
-            r'^\d+$', r'^page\s+\d+', r'^abstract$', r'^introduction$',
+            r'^\d+$', r'^page\s+\d+', r'^fig', r'^table',
             r'^table\s+of\s+contents', r'^contents$'
         ]
 
@@ -121,6 +128,7 @@ class TitleExtractor:
             title = re.sub(r'\s+', ' ', title).strip()
 
             if self._is_valid_title(title):
+                logger.info(f"Title from filename: {title}")
                 return title
         except Exception:
             pass
@@ -128,7 +136,7 @@ class TitleExtractor:
         return ""
 
     def _is_valid_title(self, title):
-        if not title or len(title) < 5 or len(title) > 200:
+        if not title or len(title) < 3 or len(title) > 200:
             return False
 
         if not re.search(r'[a-zA-Z]', title):
