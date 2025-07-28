@@ -1,0 +1,70 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Documentation (optional, remove if you want to include docs)
+*.md
+README*
+CHANGELOG*
+LICENSE*
+
+# Test files (if any)
+tests/
+test_*
+*_test.py
+
+# Docker files (to avoid recursion)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Output from previous runs (these will be generated fresh)
+output/*.json
